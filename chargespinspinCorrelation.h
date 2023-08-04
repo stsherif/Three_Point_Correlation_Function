@@ -1,11 +1,13 @@
 #include "itensor/all.h"
 #include "itensor/util/print_macro.h"
 
-using namespace itensor;
 //This fuction should measure <Nhc Si^z Sj^z> <Nhc Si^+ Sj^-> <Nhc Si^- Sj^+>
 // Where i<c<j
-// Nh is a hole number operator
-//------------------------------------------------------------------
+// c is a central site that we choose and input in the function
+// Nh is a hole number operator that we need to manually add in the file itensor/itensor/mps/sites/tj.h
+//------------------------------------------------------------------------------------------------------------
+using namespace itensor;
+
 void chargespinspinCorrelator(MPS psi, const SiteSet sites, int c){
 	auto N = length(psi);
 	printfln("i j c <Nhc Si^z Sj^z> <Nhc Si^+ Sj^-> <Nhc Si^- Sj^+>");
@@ -53,9 +55,9 @@ void chargespinspinCorrelator(MPS psi, const SiteSet sites, int c){
 		Cz *= dag(prime(prime(psi(j),"Site"),il));
 		Cpm *= dag(prime(prime(psi(j),"Site"),il));
 	        Cmp *= dag(prime(prime(psi(j),"Site"),il));
-		} //closes if j>i and j>c
+		} //closes if ((j>i) and (j>c))
 	printfln("",i," ",j," ",elt(Cz)," ",eltC(Cpm)," ",eltC(Cmp));	
-	     } // closes if i<c
+	     } // closes if (i<c)
 	         } // closes for (int j=i;j<=N;j++)
 	         } // closes for (int i=1;i<=N;i++)
 	         } // closes the function
