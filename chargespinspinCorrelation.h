@@ -1,6 +1,8 @@
 #include "itensor/all.h"
 #include "itensor/util/print_macro.h"
 
+//Nh is a hole number operator that has to be added manualy
+
 using namespace itensor;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ////computing charge spin spin correlation
@@ -11,7 +13,7 @@ void chargespinspinCorrelator(MPS psi, const SiteSet sites, int c){
         for (int i = 1;i<=N;i++)
 	{if(c>i)
 	{for(int j=i;j<c;j++)
-                {
+                {  //----------------------------i=j c----------------------------------
 		if(j==i){psi.position(i);
                 auto Cz = psi(i)*sites.op("Sz",i)*prime(sites.op("Sz",i));
                 auto Cpm = psi(i)*sites.op("S+",i)*prime(sites.op("S-",i));
@@ -37,7 +39,8 @@ void chargespinspinCorrelator(MPS psi, const SiteSet sites, int c){
                 Cmp *= dag(prime(prime(psi(c),"Site"),ill));
 		printfln("",i," ",j," ",elt(Cz)," ",elt(Cpm)," ",elt(Cmp)); 
 		}//closes if i==j
-	 else{psi.position(i);
+	 else{//-------------------------------------------------i j c-------------------------
+		 psi.position(i);
                 auto Cz = psi(i)*sites.op("Sz",i);
                 auto Cpm = psi(i)*sites.op("S+",i);
                 auto Cmp = psi(i)*sites.op("S-",i);
@@ -79,6 +82,7 @@ printfln("",i," ",j," ",elt(Cz)," ",elt(Cpm)," ",elt(Cmp));
 	 }//closes else
 
 }// closes for j=i to c
+	 //------------------------------------------i c j-------------------------------------------------
 		for (int j=c+1;j<=N;j++)
 	{psi.position(i);
                 auto Cz = psi(i)*sites.op("Sz",i);
@@ -122,7 +126,7 @@ printfln("",i," ",j," ",elt(Cz)," ",elt(Cpm)," ",elt(Cmp));
 	} //closes for j=c+1
 } //closes if i<c
 else if (i>c)
-{
+{ //-----------------------------------------------c i=j-------------------------------------
 	for(int j=i;j<=N;j++)
                 {
                 if(j==i){psi.position(c);
@@ -151,7 +155,8 @@ else if (i>c)
                 printfln("",i," ",j," ",elt(Cz)," ",elt(Cpm)," ",elt(Cmp));
                 }//closes if i==j
 		else
-		{ psi.position(c);
+		{ //---------------------------------------------c i j--------------------------------------------------
+			psi.position(c);
                 auto Cz = psi(c)*sites.op("Nh",c);
                 auto Cpm = psi(c)*sites.op("Nh",c);
                 auto Cmp = psi(c)*sites.op("Nh",c);
